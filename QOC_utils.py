@@ -36,7 +36,7 @@ def profile(fnc):
     
     return inner
 
-class NIC_CAGE_qubit:
+class QOC_qubit:
     def __init__(self, t_state, t_field, tau, f, N, alpha, n_qb, init_state_idx, target_state_idx, omega, coupling, ifContinuedSolving):
         self.t_state = t_state         # time interval for states
         self.t_field = t_field         # time interval for pulses
