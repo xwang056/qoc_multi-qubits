@@ -39,7 +39,7 @@ maxIter = 100             # upper limit of number of iterations
 ifContinuedSolving = False
 
 # load QOC optimization module:
-qcm = utils.NIC_CAGE_qubit(t_state, t_field, tau, f, N, alpha, n_qb, init_state_idx, target_state_idx, omega, coupling, ifContinuedSolving)
+qcm = utils.QOC_qubit(t_state, t_field, tau, f, N, alpha, n_qb, init_state_idx, target_state_idx, omega, coupling, ifContinuedSolving)
 
 random_seed_1 = 42          # comment the random seed when not testing for timing
 Bx = qcm.init_Bf(random_seed_1)           # define initial Bx with white noise
