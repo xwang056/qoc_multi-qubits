@@ -1,2 +1,2 @@
 # qoc_multi-qubits
-To find out the electric field Ef(t) for state transitions as a functional of potential
+To find out the optimal magnetic pulses B(t) exciting desired transitions in multi-qubit systems
