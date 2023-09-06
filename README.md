@@ -1,4 +1,5 @@
 # qoc_multi-qubits
+# Copyright by Xian Wang
 To find out the optimal magnetic pulses B(t) exciting desired transitions in multi-qubit systems.
 Input parameters in QOC_MultiQubits.py
 Utilities and methods are in QOC_utils.py
