@@ -2,7 +2,7 @@
 
 Copyright [2023] by Xian Wang
 
-To find out the optimal magnetic pulses B(t) exciting desired transitions in multi-qubit systems.
+This project was developed to solve the optimal magnetic pulses B(t) exciting desired transitions in multi-qubit systems.
 Input parameters in QOC_MultiQubits.py
 Utilities and methods are in QOC_utils.py
 
