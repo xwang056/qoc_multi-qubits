@@ -2870,7 +2870,7 @@ class QOC_qubit:
         subspace_sign = np.logical_or(init_subspace_sign, target_subspace_sign)
         subspace_sign = np.multiply(subspace_sign, 1)
         dim_H = 0
-        for i in range(n_qb):
+        for i in range(num_subspace):
             if (subspace_sign[i] == 1):
                 dim_H = dim_H + dim_subspace_list[i]           #dimension of Hamiltonian
         
@@ -2878,7 +2878,7 @@ class QOC_qubit:
         Q_dagger = np.zeros((dim_H, 2**n_qb), dtype=np.float64)
         row_reduced = 0
         row_full = 0
-        for i in range(n_qb):
+        for i in range(num_subspace):
             if (subspace_sign[i] == 1):
                 for idx in range(dim_subspace_list[i]):
                     Q_dagger[row_reduced + idx] = Q_dagger_full[row_full + idx]
@@ -2926,7 +2926,7 @@ class QOC_qubit:
         subspace_sign = np.logical_or(init_subspace_sign, target_subspace_sign)
         subspace_sign = np.multiply(subspace_sign, 1)        
         dim_H = 0
-        for i in range(n_qb):
+        for i in range(num_subspace):
             if (subspace_sign[i] == 1):
                 dim_H = dim_H + dim_subspace_list[i]           # dimension of Hamiltonian
         
@@ -2934,7 +2934,7 @@ class QOC_qubit:
         Q_dagger = np.zeros((dim_H, 2**n_qb), dtype=np.float64)
         row_reduced = 0
         row_full = 0
-        for i in range(n_qb):
+        for i in range(num_subspace):
             if (subspace_sign[i] == 1):
                 for idx in range(dim_subspace_list[i]):
                     Q_dagger[row_reduced + idx] = Q_dagger_full[row_full + idx]
