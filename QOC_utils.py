@@ -2767,7 +2767,7 @@ class QOC_qubit:
                 J_M_chain[row][col][n_qb - 1][1] = M[-1][row]
         
         # element in Q_dagger is generalized Clebsch-Gordan coefficient <ms1, ms2, ..., ms_n | J2, J3, …, J_n, M>
-        # this generalized Clebsch-Gordan coefficientis the product of series of Clebsch-Gordan coefficient
+        # this generalized Clebsch-Gordan coefficient is the product of series of Clebsch-Gordan coefficient
         # Calculate for analytical expression of Q_dagger:
         # Place (ms1, ms2, ..., ms_i, ..., ms_n) in rows, 2^n arrangements, m1 = m2 = ... = m_n = 1/2
         # Place (J1, M1; J2, M2; ...; J_i, M_i; ...; J_n, M_n) in columns, 2^n possible values
@@ -3161,9 +3161,11 @@ class QOC_qubit:
         else:
             flag = np.identity(n_qb, dtype=np.int8)
             if eval_complex == False :
-                H = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.float64)
+                #H = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.float64)
+                H = np.zeros((2**n_qb, 2**n_qb), dtype=np.float64)
             else:
-                H = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.complex128)
+                #H = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.complex128)
+                H = np.zeros((2**n_qb, 2**n_qb), dtype=np.complex128)
             for j in range(0, n_qb):
                 flag_j = flag[j]
                 if eval_complex == False :
@@ -3178,8 +3180,9 @@ class QOC_qubit:
                 H_j = np.kron(element_for_H_j[0], element_for_H_j[1])
                 for k in range(2, n_qb):
                     H_j = np.kron(H_j, element_for_H_j[k])
-                H[j] = H_j
-            H = np.sum(H, axis=0)   
+                H = H + H_j
+                #H[j] = H_j
+            #H = np.sum(H, axis=0)   
             
         return H
     
@@ -3200,9 +3203,11 @@ class QOC_qubit:
                 flag[j][j+1] = 1             # 1 for sigmaz, 0 for identity-2
             flag[n_qb-1, 0] = 1
             if eval_complex == False :
-                H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.float64)
+                #H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.float64)
+                H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.float64)
             else:
-                H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.complex128)
+                #H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.complex128)
+                H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.complex128)
             for j in range(0, n_qb):
                 flag_j = flag[j]
                 if eval_complex == False :
@@ -3217,8 +3222,9 @@ class QOC_qubit:
                 H_coupling_j = np.kron(element_for_H_coupling_j[0], element_for_H_coupling_j[1])
                 for k in range(2, n_qb):
                     H_coupling_j = np.kron(H_coupling_j, element_for_H_coupling_j[k])
-                H_coupling[j] = H_coupling_j
-            H_coupling = np.sum(H_coupling, axis=0)
+                H_coupling = H_coupling + H_coupling_j
+                #H_coupling[j] = H_coupling_j
+            #H_coupling = np.sum(H_coupling, axis=0)
         
         return H_coupling
     
@@ -3239,8 +3245,10 @@ class QOC_qubit:
                 flag[j][j+1] = 1
             #flag[n_qb-1, 0] = 1        #ignore last row to be chain coupling
             if eval_complex == False :
+                #H_coupling = np.zeros((n_qb-1, 2**n_qb, 2**n_qb), dtype=np.float64)     #n_qb-1
                 H_coupling = np.zeros((n_qb-1, 2**n_qb, 2**n_qb), dtype=np.float64)     #n_qb-1
             else:
+                #H_coupling = np.zeros((n_qb-1, 2**n_qb, 2**n_qb), dtype=np.complex128)
                 H_coupling = np.zeros((n_qb-1, 2**n_qb, 2**n_qb), dtype=np.complex128)
             for j in range(0, n_qb-1):     #n_qb-1
                 flag_j = flag[j]
@@ -3256,8 +3264,9 @@ class QOC_qubit:
                 H_coupling_j = np.kron(element_for_H_coupling_j[0], element_for_H_coupling_j[1])
                 for k in range(2, n_qb):
                     H_coupling_j = np.kron(H_coupling_j, element_for_H_coupling_j[k])
-                H_coupling[j] = H_coupling_j
-            H_coupling = np.sum(H_coupling, axis=0)
+                H_coupling = H_coupling + H_coupling_j
+                #H_coupling[j] = H_coupling_j
+            #H_coupling = np.sum(H_coupling, axis=0)
         
         return H_coupling
     
@@ -3283,9 +3292,11 @@ class QOC_qubit:
                     l = l+1
         
         if eval_complex == False :
-            H_coupling = np.zeros((num_coupling, 2**n_qb, 2**n_qb), dtype=np.float64)
+            #H_coupling = np.zeros((num_coupling, 2**n_qb, 2**n_qb), dtype=np.float64)
+            H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.float64)
         else:
-            H_coupling = np.zeros((num_coupling, 2**n_qb, 2**n_qb), dtype=np.complex128)
+            #H_coupling = np.zeros((num_coupling, 2**n_qb, 2**n_qb), dtype=np.complex128)
+            H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.complex128)
         for j in range(0, num_coupling):
             flag_j = flag[j]
             if eval_complex == False :
@@ -3300,8 +3311,9 @@ class QOC_qubit:
             H_coupling_j = np.kron(element_for_H_coupling_j[0], element_for_H_coupling_j[1])
             for k in range(2, n_qb):
                 H_coupling_j = np.kron(H_coupling_j, element_for_H_coupling_j[k])
-            H_coupling[j] = H_coupling_j
-        H_coupling = np.sum(H_coupling, axis=0)
+            H_coupling = H_coupling + H_coupling_j
+            #H_coupling[j] = H_coupling_j
+        #H_coupling = np.sum(H_coupling, axis=0)
         
         return H_coupling
     
