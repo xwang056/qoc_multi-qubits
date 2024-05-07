@@ -64,6 +64,7 @@ solve_for_n_subdiag()
 The following functions define the Hamiltonians, states and initial pulses:
 solve_for_H_Sn()
 solve_for_H_coupling_ring()
+solve_for_H0_Dn()
 solve_for_H_coupling_chain()
 solve_for_H_coupling_lattice()
 extract_band()
