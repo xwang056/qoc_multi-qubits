@@ -3227,7 +3227,79 @@ class QOC_qubit:
             #H_coupling = np.sum(H_coupling, axis=0)
         
         return H_coupling
-    
+
+    def solve_for_H0_Dn(self, n_qb, sigma, eval_complex):
+    #Calculate for H0 with more coupling terms between further neighbors, ring coupling
+    # It must be satisfied that n_qb > 4
+        idn = self.idn
+        H0 = - self.omega * 0.5 * self.Hz + self.coupling * 0.25 * self.Hz_coupling
+        
+        if n_qb % 2 == 0:
+            max_neighbor_distance = int(n_qb / 2)
+        else:
+            max_neighbor_distance = int((n_qb-1) / 2)
+        
+        for neighbor_distance in range(2, max_neighbor_distance+1):
+            flag = np.identity(n_qb, dtype=np.int8)    #whether sigmaz or identity-2
+            for j in range(0, n_qb-neighbor_distance):
+                flag[j][j + neighbor_distance] = 1             # 1 for sigmaz, 0 for identity-2
+            if not((n_qb % 2 == 0) and (neighbor_distance == max_neighbor_distance) ):
+                for j in range(n_qb-neighbor_distance, n_qb):
+                    flag[j, int(j - (n_qb-neighbor_distance) ) ] = 1
+            #print(flag)
+            if (n_qb % 2 == 0) and (neighbor_distance == max_neighbor_distance):
+                if eval_complex == False :
+                    #H_coupling = np.zeros(((n_qb-neighbor_distance), 2**n_qb, 2**n_qb), dtype=np.float64)
+                    H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.float64)
+                else:
+                    #H_coupling = np.zeros(((n_qb-neighbor_distance), 2**n_qb, 2**n_qb), dtype=np.complex128)
+                    H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.complex128)
+                for j in range(0, (n_qb-neighbor_distance) ):
+                    flag_j = flag[j]
+                    if eval_complex == False :
+                        element_for_H_coupling_j = np.zeros((n_qb, 2, 2), dtype=np.float64)
+                    else:
+                        element_for_H_coupling_j = np.zeros((n_qb, 2, 2), dtype=np.complex128)
+                    for k in range(0, n_qb):
+                        if flag_j[k] == 0:
+                            element_for_H_coupling_j[k] = idn
+                        else:
+                            element_for_H_coupling_j[k] = sigma
+                    H_coupling_j = np.kron(element_for_H_coupling_j[0], element_for_H_coupling_j[1])
+                    for k in range(2, n_qb):
+                        H_coupling_j = np.kron(H_coupling_j, element_for_H_coupling_j[k])
+                    H_coupling = H_coupling + H_coupling_j
+                    #H_coupling[j] = H_coupling_j
+                #H_coupling = np.sum(H_coupling, axis=0)
+            else:
+                if eval_complex == False :
+                    #H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.float64)
+                    H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.float64)
+                else:
+                    #H_coupling = np.zeros((n_qb, 2**n_qb, 2**n_qb), dtype=np.complex128)
+                    H_coupling = np.zeros((2**n_qb, 2**n_qb), dtype=np.complex128)
+                for j in range(0, n_qb):
+                    flag_j = flag[j]
+                    if eval_complex == False :
+                        element_for_H_coupling_j = np.zeros((n_qb, 2, 2), dtype=np.float64)
+                    else:
+                        element_for_H_coupling_j = np.zeros((n_qb, 2, 2), dtype=np.complex128)
+                    for k in range(0, n_qb):
+                        if flag_j[k] == 0:
+                            element_for_H_coupling_j[k] = idn
+                        else:
+                            element_for_H_coupling_j[k] = sigma
+                    H_coupling_j = np.kron(element_for_H_coupling_j[0], element_for_H_coupling_j[1])
+                    for k in range(2, n_qb):
+                        H_coupling_j = np.kron(H_coupling_j, element_for_H_coupling_j[k])
+                    H_coupling = H_coupling + H_coupling_j
+                    #H_coupling[j] = H_coupling_j
+                #H_coupling = np.sum(H_coupling, axis=0)
+            #print(0.5 ** (neighbor_distance+1) )   
+            H0 = H0 + self.coupling * (0.5 ** (neighbor_distance+1) ) * H_coupling
+                
+        return H0
+        
     def solve_for_H_coupling_chain(self, n_qb, sigma, eval_complex):
     # Calculate for second order H_coupling, chain coupling
         idn = self.idn
